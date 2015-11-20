@@ -1,0 +1,25 @@
+extends ./base.jade
+block append style
+	link(rel='stylesheet', type='text/css', href='/assets/style.css')
+block body
+	nav#navigation
+		a(href='/') Home
+		span.delimiter &bullet;
+		a(href='/signup') Sign Up
+	div#content
+		h1 Poster
+		p.subtitle A site where you can post things.  Like, with your friends and junk.
+		div#signin(class='box', style='width:512px')
+			div.boxInterior
+				h2 Sign In
+				form#loginForm(name="loginForm", action="/signin", method="POST")
+					label(for='username') Username:
+					input#user(type='text', name='username', placeholder='Username')
+					div.clear
+					label(for='pass') Password:
+					input#pass(type='password', name='pass', placeholder='Password')
+					div.clear
+					input(type="hidden", name="_csrf", value="#{csrfToken}")
+					a#loginSubmit(href='#') Sign In
+block scripts
+	script(src="/assets/client.js")
