@@ -1,7 +1,7 @@
 {
-  "name": "Logins",
+  "name": "MCV_Project",
   "version": "1.0.0",
-  "description": "A Simple Login Example using Node.js, Mongo, Redis and PBKDF2",
+  "description": "Project for IGME430",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
@@ -15,7 +15,7 @@
     "Login",
     "PBKDF2"
   ],
-  "author": "Cody Van De Mark",
+  "author": "Gwendolyn Hart",
   "license": "Apache 2.0",
   "dependencies": {
     "body-parser": "^1.9.1",
