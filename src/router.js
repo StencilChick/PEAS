@@ -3,13 +3,20 @@ var controllers = require('./controllers');
 var mid = require('./middleware');
 
 var router = function(app) {
-	app.get('/signin', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
-	app.post('/signin', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
+	// log in
+	app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+	app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
+
+	// sign up
 	app.get('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signupPage);
 	app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-	app.get('/signout', mid.requiresLogin, controllers.Account.logout);
-	app.get('/main', mid.requiresLogin, controllers.Post.mainPage);
-	app.post('/main', mid.requiresLogin, controllers.Post.makePost);
+	
+	// log out
+	app.get('/logout', mid.requiresLogin, controllers.Account.logout);
+	
+	// game
+	app.get('/main', mid.requiresLogin, controllers.Game.mainPage);
+	
 	app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

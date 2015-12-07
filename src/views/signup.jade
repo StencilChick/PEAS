@@ -1,28 +1,20 @@
-extends ./base.jade
-block append style
-	link(rel='stylesheet', type='text/css', href='/assets/style.css')
+extends ./temps/base
 block body
-	nav#navigation
-		a(href='/') Home
-		span.delimiter &bullet;
-		a(href='/') Sign Up
-	div#content
-		h1 Sign up for Poster
-		p.subtitle Make an account.  To post things with.
-		div#signup(class='box', style='width:512px')
-			div.boxInterior
-				form#signupForm(name="signupForm", action="/signup", method="POST")
-					label(for='username') Username:
-					input#user(type='text', name='username', placeholder='Username')
-					div.clear
-					label(for='pass1') Password:
-					input#pass(type='password', name='pass', placeholder='Password')
-					div.clear
-					label(for='pass2') Confirm Password:
-					input#pass2(type='password', name='pass2', placeholder='Confirm')
-					div.clear
-					input(type="hidden", name="_csrf", value="#{csrfToken}")
-					//input(type='submit', value='Sign Up')
-					a#signupSubmit(href='#') Sign Up
+	form(name='signupForm', class='login')
+		label(for='username') Username:
+		input(type='text', name='username')
+		div(class='clear')
+		
+		label(for='pass1') Password:
+		input(type='password', name='pass1')
+		div(class='clear')
+		
+		label(for='pass2') Confirm Password:
+		input(type='password', name='pass2')
+		div(class='clear')
+		
+		input(type='hidden', name='csrfToken', value='#{csrfToken}')
+		a(id='signupButton', class='submit', href='#') Sign Up
+	p#error
 block scripts
-	script(src='/assets/client.js')
+	script(src='/assets/accounts.js')

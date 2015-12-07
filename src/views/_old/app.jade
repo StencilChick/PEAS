@@ -1,0 +1,29 @@
+extends ./base.jade
+block append style
+	link(rel="stylesheet", type="text/css", href="/assets/style.css")
+block body
+	nav#navigation
+		if !all
+			a(href='/main') Main
+			span.delimiter &bullet;
+		a(href='/signout') Sign Out
+	div#content
+		if all
+			div.box(style='width:512px')
+				div.boxInterior
+					h2 Write New Post
+					form#makePost(name='makePost', action='/main', method='POST')
+						textarea(type='text', name='content', maxlength='140', rows='3', style='width:100%')
+						input#contentInput(type="hidden", name="_csrf", value="#{csrfToken}")
+						a#submitPost(href='#') Submit
+		if !posts || posts.length == 0
+			p(style='text-align:center') No posts yet.  Why don't you write one?
+		else
+			each val in posts
+				div.box
+					div.boxInterior
+						p.subtitle By 
+							a(href='/main?user=#{val.ownerName}') #{val.ownerName}:
+						p #{val.content}
+block scripts
+	script(src="/assets/main.js")

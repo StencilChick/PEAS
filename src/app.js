@@ -1,7 +1,7 @@
 // import
 var path = require('path');
 var express = require('express');
-var compression= require('compression');
+var compression = require('compression');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -10,9 +10,11 @@ var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var url = require('url');
 var csrf = require('csurf');
+var socketio = require('socket.io');
+var socket = require('./socket.js');
 
 // connect to database
-var dbURL = process.env.MONGOLAB_URI || 'mongodb://localhost/Poster';
+var dbURL = process.env.MONGOLAB_URI || 'mongodb://localhost/PEAS';
 var db = mongoose.connect(dbURL, function(err) {
 	if (err) {
 		console.log('Could not connect to database.');
@@ -72,10 +74,12 @@ app.use(function (err, req, res, next) {
 });
 
 router(app);
-
-app.listen(port, function(err) {
+var server = app.listen(port, function(err) {
 	if (err) {
 		throw err;
 	}
 	console.log('Listening on port ' + port + '...');
 });
+
+var io = socketio.listen(server);
+socket.configureSockets(io);
