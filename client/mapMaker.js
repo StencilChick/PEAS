@@ -3,7 +3,10 @@
 var canvas;
 var context;
 
-var colour = 'green';
+var form;
+
+var tileset = new Image();
+tileset.src = '/assets/img/tileset.png';
 
 var map = {tiles: []};
 var setupMap = function() {
@@ -26,7 +29,7 @@ var setupInput = function() {
 		var y = Math.floor((e.pageY - canvasRect.top) / 32);
 		
 		console.log(x + ', ' + y);
-		map.tiles[y][x] = {colour: colour};
+		map.tiles[y][x] = {x: form['x'].value, y: form['y'].value};
 	});
 	
 	// buttons
@@ -35,23 +38,16 @@ var setupInput = function() {
 		
 		document.getElementById('output').innerHTML = JSON.stringify(map);
 	});
-	
-	document.getElementById('grass').addEventListener('click', function(e) {
-		e.preventDefault();
-		colour = 'forestgreen';
-	});
-	document.getElementById('path').addEventListener('click', function(e) {
-		e.preventDefault();
-		colour = 'blanchedalmond';
-	});
 }
 
 var updateCanvas = function() {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+
 	for (var y = 0; y < 480/32; y++) {
 		for (var x = 0; x < 640/32; x++) {
 			if (map.tiles[y][x] != undefined) {
-				context.fillStyle = map.tiles[y][x].colour;
-				context.fillRect(x*32, y*32, 32, 32);
+				var tile = map.tiles[y][x];
+				context.drawImage(tileset, tile.x*32, tile.y*32, 32, 32, x*32, y*32, 32, 32);
 			}
 		}
 	}
@@ -62,6 +58,9 @@ var updateCanvas = function() {
 window.onload = function() {
 	canvas = document.getElementById('view');
 	context = canvas.getContext('2d');
+	
+	form = document.forms['tileForm'];
+	
 	setupMap();
 
 	setupInput();
