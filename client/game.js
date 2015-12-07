@@ -7,6 +7,8 @@ var player = {
 };
 var players = {};
 
+var map;
+
 var socket;
 
 var setupSocket = function() {
@@ -17,6 +19,11 @@ var setupSocket = function() {
 		player.x = Math.floor(Math.random() * 5);
 		player.y = Math.floor(Math.random() * 5);
 		socket.emit('join', {x: player.x, y: player.y});
+	});
+	
+	socket.on('map', function(data) {
+		map = data;
+		console.log(map);
 	});
 	
 	socket.on('join', function(data) {
@@ -51,19 +58,35 @@ var setupCanvas = function() {
 }
 
 var updateCanvas = function() {
-	// draw all the things
-	context.clearRect(0, 0, canvas.width, canvas.height);
-
-	context.fillStyle = 'red';
-	var pList = Object.keys(players);
-	for (var i = 0; i < pList.length; i++) {
-		var obj = players[pList[i]];
+	if (map) {
+		// draw all the things
+		context.clearRect(0, 0, canvas.width, canvas.height);
 		
-		context.fillRect(obj.x*32, obj.y*32, 32, 32);
+		for (var y = 0; y < 480/32; y++) {
+		if (y < map.tiles.length) {
+			for (var x = 0; x < 640/32; x++) {
+			if (x < map.tiles[y].length) {
+				context.fillStyle = map.tiles[y][x].colour;
+				context.fillRect(x*32, y*32, 32, 32);
+			}
+			}
+		}
+		}
+
+		context.fillStyle = 'red';
+		var pList = Object.keys(players);
+		for (var i = 0; i < pList.length; i++) {
+			var obj = players[pList[i]];
+			
+			context.fillRect(obj.x*32, obj.y*32, 32, 32);
+		}
+		
+		context.fillStyle = 'blue';
+		context.fillRect(player.x*32, player.y*32, 32, 32);
+		context.strokeStyle = 'black';
+		context.lineWidth = 2;
+		context.strokeRect(player.x*32, player.y*32, 32, 32);
 	}
-	
-	context.fillStyle = 'green';
-	context.fillRect(player.x*32, player.y*32, 32, 32);
 	
 	// update
 	setTimeout(updateCanvas, 1000/30);
@@ -71,6 +94,8 @@ var updateCanvas = function() {
 
 var setupInput = function() {
 	window.addEventListener('keydown', function(e) {
+		e.preventDefault();
+	
 		var k = e.keyCode;
 		if (k == 37) {
 			player.x -= 1;

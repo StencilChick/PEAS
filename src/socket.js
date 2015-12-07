@@ -1,5 +1,6 @@
-var users = {};
+var maps = require('./maps');
 
+var users = {};
 
 var configureSockets = function(io) {
 	io.sockets.on('connection', function(socket) {
@@ -8,6 +9,8 @@ var configureSockets = function(io) {
 			socket.name = '' + Date.now() + Math.floor(Math.random() * 100);
 			socket.lastData = data;
 			socket.join('map0');
+			
+			socket.emit('map', maps.map0);
 		
 			socket.broadcast.to('map0').emit('join', formatData(socket, data));
 			var uKeys = Object.keys(users);

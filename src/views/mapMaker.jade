@@ -1,0 +1,18 @@
+extends ./temps/base
+block body
+	div#menu
+		a(href='/logout') Log Out
+		span.delimiter &bullet;
+		a(href='/main') Game
+		
+	canvas#view(width='640', height='480')
+	div(style='width:640px;margin:0 auto')
+		button#grass Grass
+		button#path Path
+	div(style='width:640px;margin:0 auto')
+		button#outputMap(style='float:right') Output Map
+		div.clear
+	
+	p#output(style='width:50%;margin:0 auto')
+block scripts
+	script(src='/assets/mapMaker.js')

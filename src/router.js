@@ -16,6 +16,7 @@ var router = function(app) {
 	
 	// game
 	app.get('/main', mid.requiresLogin, controllers.Game.mainPage);
+	app.get('/mapMaker', mid.requiresLogin, controllers.Game.mapMakerPage);
 	
 	app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

@@ -1,5 +1,7 @@
 extends ./temps/base
 block body
+	div#menu
+		a(href='/login') Log In
 	form(name='signupForm', class='login')
 		label(for='username') Username:
 		input(type='text', name='username')
@@ -14,7 +16,7 @@ block body
 		div(class='clear')
 		
 		input(type='hidden', name='csrfToken', value='#{csrfToken}')
-		a(id='signupButton', class='submit', href='#') Sign Up
+		button#signupButton(class='submit', href='#') Sign Up
 	p#error
 block scripts
 	script(src='/assets/accounts.js')

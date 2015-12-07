@@ -1,6 +1,11 @@
 extends ./temps/base
 block body
+	div#menu
+		a(href='/logout') Log Out
+		
 	canvas#game(width='640', height='480')
+	
+	p(style='text-align:center') You = Blue, Other Players = Red
 block scripts
 	script(src='/socket.io/socket.io.js')
 	script(src='/assets/game.js')
