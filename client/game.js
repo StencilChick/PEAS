@@ -21,6 +21,7 @@ var setupSocket = function() {
 	
 	socket.on('join', function(data) {
 		players[data.player] = data.data;
+		players[data.player].lastUpdate = Date.now();
 	});
 	
 	socket.on('leave', function(data) {
@@ -28,7 +29,15 @@ var setupSocket = function() {
 	});
 	
 	socket.on('update', function(data) {
-		
+		if (data.player in players) {
+			if (data.date > players[data.player].lastUpdate) {
+				var p = players[data.player];
+				p.lastUpdate = data.date;
+				
+				p.x = data.data.x;
+				p.y = data.data.y;
+			}
+		}
 	});
 }
 
@@ -60,7 +69,26 @@ var updateCanvas = function() {
 	setTimeout(updateCanvas, 1000/30);
 }
 
+var setupInput = function() {
+	window.addEventListener('keydown', function(e) {
+		var k = e.keyCode;
+		if (k == 37) {
+			player.x -= 1;
+		} else if (k == 38) {
+			player.y -= 1;
+		} else if (k == 39) {
+			player.x += 1;
+		} else if (k == 40) {
+			player.y += 1;
+		}
+		
+		socket.emit('update', player);
+	});
+}
+
+// init
 window.onload = function() {
+	setupInput();
 	setupCanvas();
 	setupSocket();
 	
