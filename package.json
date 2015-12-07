@@ -1,22 +1,14 @@
 {
-  "name": "MCV_Project",
+  "name": "PEAS",
   "version": "1.0.0",
-  "description": "Project for IGME430",
+  "description": "Final project",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
     "pretest": "jshint ./src",
     "test": "echo \"Tests Complete\""
   },
-  "keywords": [
-    "Node",
-    "MVC",
-    "Redis",
-    "Login",
-    "PBKDF2"
-  ],
   "author": "Gwendolyn Hart",
-  "license": "Apache 2.0",
   "dependencies": {
     "body-parser": "^1.9.1",
     "compression": "^1.2.0",
@@ -30,6 +22,8 @@
     "jade": "^1.7.0",
     "mongoose": "^4.1.11",
     "serve-favicon": "^2.1.6",
+    "socket.io": "^1.3.7",
+    "socket.io-client": "^1.3.7",
     "underscore": "^1.7.0",
     "url": "^0.11.0"
   },
