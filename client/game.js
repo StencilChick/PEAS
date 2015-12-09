@@ -89,10 +89,11 @@ var updateCanvas = function() {
 		
 		/*context.fillStyle = 'blue';
 		context.fillRect(player.x*32, player.y*32, 32, 32);
-		context.strokeStyle = 'black';
+		/*context.strokeStyle = 'black';
 		context.lineWidth = 2;
 		context.strokeRect(player.x*32, player.y*32, 32, 32);*/
-		context.drawImage(characterSprite, 0, 0, 32, 32, player.x*32, player.y*32, 32, 32);
+		
+		context.drawImage(characterSprite, 0, 0, 32, 48, player.x*32, player.y*32-32, 32, 48);
 	}
 	
 	// update
