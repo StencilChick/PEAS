@@ -1,5 +1,14 @@
 "use strict";
 
+var map;
+
+// images
+var tileset = new Image();
+tileset.src = 'assets/img/tileset.png';
+
+var characterSprite = new Image();
+characterSprite.src = 'assets/img/character.png';
+
 // socket stuff
 var player = {
 	x: 0,
@@ -7,10 +16,7 @@ var player = {
 };
 var players = {};
 
-var map;
-
 var socket;
-
 var setupSocket = function() {
 	socket = io.connect();
 	players = {};
@@ -58,7 +64,7 @@ var setupCanvas = function() {
 }
 
 var updateCanvas = function() {
-	if (map) {
+	if (map && tileset.complete && characterSprite.complete) {
 		// draw all the things
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		
@@ -66,8 +72,8 @@ var updateCanvas = function() {
 		if (y < map.tiles.length) {
 			for (var x = 0; x < 640/32; x++) {
 			if (x < map.tiles[y].length) {
-				context.fillStyle = map.tiles[y][x].colour;
-				context.fillRect(x*32, y*32, 32, 32);
+				var tile = map.tiles[y][x];
+				context.drawImage(tileset, tile.x*32, tile.y*32, 32, 32, x*32, y*32, 32, 32);
 			}
 			}
 		}
@@ -81,11 +87,12 @@ var updateCanvas = function() {
 			context.fillRect(obj.x*32, obj.y*32, 32, 32);
 		}
 		
-		context.fillStyle = 'blue';
+		/*context.fillStyle = 'blue';
 		context.fillRect(player.x*32, player.y*32, 32, 32);
 		context.strokeStyle = 'black';
 		context.lineWidth = 2;
-		context.strokeRect(player.x*32, player.y*32, 32, 32);
+		context.strokeRect(player.x*32, player.y*32, 32, 32);*/
+		context.drawImage(characterSprite, 0, 0, 32, 32, player.x*32, player.y*32, 32, 32);
 	}
 	
 	// update

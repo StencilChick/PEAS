@@ -8,6 +8,8 @@ var form;
 var tileset = new Image();
 tileset.src = '/assets/img/tileset.png';
 
+var mouseDown = 0;
+
 var map = {tiles: []};
 var setupMap = function() {
 	for (var y = 0; y < 480/32; y++) {
