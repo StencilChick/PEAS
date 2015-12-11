@@ -27,6 +27,8 @@ var configureSockets = function(io) {
 		socket.on('update', function(data) {
 			if (data.date) {
 				if (data.date < socket.lastData.date) return;
+			} else {
+				data.date = Date.now();
 			}
 			
 			socket.lastData = data;

@@ -9,10 +9,26 @@ tileset.src = 'assets/img/tileset.png';
 var characterSprite = new Image();
 characterSprite.src = 'assets/img/character.png';
 
+var npcSprite = new Image();
+npcSprite.src = 'assets/img/npc.png';
+
 // socket stuff
+var emitInterval = 1;
+var emitCount = 0;
+
+var direction = {
+	down: 0,
+	up: 1,
+	right: 2,
+	left: 3
+};
+
 var player = {
 	x: 0,
-	y: 0
+	y: 0,
+	direction: direction.down,
+	walking: false,
+	animFrame: 0.0
 };
 var players = {};
 
@@ -24,12 +40,11 @@ var setupSocket = function() {
 	socket.on('connect', function() {
 		player.x = Math.floor(Math.random() * 5);
 		player.y = Math.floor(Math.random() * 5);
-		socket.emit('join', {x: player.x, y: player.y});
+		socket.emit('join', player);
 	});
 	
 	socket.on('map', function(data) {
 		map = data;
-		console.log(map);
 	});
 	
 	socket.on('join', function(data) {
@@ -45,10 +60,10 @@ var setupSocket = function() {
 		if (data.player in players) {
 			if (data.date > players[data.player].lastUpdate) {
 				var p = players[data.player];
+				p = data.data;
 				p.lastUpdate = data.date;
 				
-				p.x = data.data.x;
-				p.y = data.data.y;
+				players[data.player] = p;
 			}
 		}
 	});
@@ -65,6 +80,49 @@ var setupCanvas = function() {
 
 var updateCanvas = function() {
 	if (map && tileset.complete && characterSprite.complete) {
+		// update all the things
+		if (!(keysdown.left || keysdown.right || keysdown.up || keysdown.down)) {
+			player.walking = false;
+		} else {
+			if (keysdown.left) {
+				player.x -= 3 / 30;
+				player.direction = direction.left;
+				
+				if (!player.walking) player.animFrame = 1;
+				player.walking = true;
+			} 
+			if (keysdown.right) {
+				player.x += 3 / 30;
+				player.direction = direction.right;
+				
+				if (!player.walking) player.animFrame = 1;
+				player.walking = true;
+			}
+			if (keysdown.up) {
+				player.y -= 3 / 30;
+				player.direction = direction.up;
+				
+				if (!player.walking) player.animFrame = 1;
+				player.walking = true;
+			}
+			if (keysdown.down) {
+				player.y += 3 / 30;
+				player.direction = direction.down;
+				
+				if (!player.walking) player.animFrame = 1;
+				player.walking = true;
+			}
+		}
+		
+		if (player.walking) {
+			player.animFrame += 4 / 30;
+			if (player.animFrame >= 4) {
+				player.animFrame = 0;
+			}
+		} else {
+			player.animFrame = 0;
+		}
+		
 		// draw all the things
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		
@@ -79,43 +137,108 @@ var updateCanvas = function() {
 		}
 		}
 
-		context.fillStyle = 'red';
 		var pList = Object.keys(players);
-		for (var i = 0; i < pList.length; i++) {
-			var obj = players[pList[i]];
+		var drawOrder = sortCharacters();
+		for (var i = 0; i < drawOrder.length; i++) {
+			var index = drawOrder[i];
 			
-			context.fillRect(obj.x*32, obj.y*32, 32, 32);
+			if (index == -1) {
+				context.drawImage(characterSprite, Math.floor(player.animFrame)*32, player.direction*48, 32, 48, Math.floor(player.x*32), Math.floor(player.y*32-32), 32, 48);
+			} else {
+				var obj = players[pList[index]];
+				context.drawImage(npcSprite, Math.floor(obj.animFrame)*32, obj.direction*48, 32, 48, Math.floor(obj.x*32), Math.floor(obj.y*32-32), 32, 48);
+			}
 		}
 		
-		/*context.fillStyle = 'blue';
-		context.fillRect(player.x*32, player.y*32, 32, 32);
-		/*context.strokeStyle = 'black';
-		context.lineWidth = 2;
-		context.strokeRect(player.x*32, player.y*32, 32, 32);*/
 		
-		context.drawImage(characterSprite, 0, 0, 32, 48, player.x*32, player.y*32-32, 32, 48);
+	}
+	
+	// emit all the things
+	emitCount -= 1;
+	if (emitCount <= 0) {
+		emitCount = emitInterval;
+		
+		socket.emit('update', player);
 	}
 	
 	// update
 	setTimeout(updateCanvas, 1000/30);
 }
 
-var setupInput = function() {
-	window.addEventListener('keydown', function(e) {
-		e.preventDefault();
+var sortCharacters = function() {
+	var list = [-1];
+	var playerNames = Object.keys(players);
 	
-		var k = e.keyCode;
-		if (k == 37) {
-			player.x -= 1;
-		} else if (k == 38) {
-			player.y -= 1;
-		} else if (k == 39) {
-			player.x += 1;
-		} else if (k == 40) {
-			player.y += 1;
+	for (var i = 0; i < playerNames.length; i++) {
+		for (var ii = 0; ii <= list.length; ii++) {
+			if (ii == list.length) {
+				list.push(i);
+				break;
+			} else {
+				var index = list[ii];
+				
+				var other;
+				if (index == -1) {
+					other = player;
+				} else {
+					other = players[playerNames[index]];
+				}
+				
+				if (players[playerNames[i]].y < other.y) {
+					list.splice(ii, 0, i);
+					break;
+				}
+			}
 		}
+	}
+	
+	return list;
+}
+
+// input stuff
+var keycodes = {
+	left: 37,
+	up: 38,
+	right: 39,
+	down: 40,
+	w: 87,
+	a: 65,
+	s: 83,
+	d: 68
+};
+var keyNames = [];
+var keycodeValues = [];
+
+var keysdown = {};
+
+var setupInput = function() {
+	keyNames = Object.keys(keycodes);
+	for (var i = 0; i < keyNames.length; i++) {
+		keysdown[keyNames[i]] = false;
 		
-		socket.emit('update', player);
+		keycodeValues.push(keycodes[keyNames[i]]);
+	}
+
+	window.addEventListener('keydown', function(e) {
+		var k = e.keyCode;
+		
+		var index = keycodeValues.indexOf(k);
+		if (index > -1) {
+			e.preventDefault();
+			
+			keysdown[keyNames[index]] = true;
+		}
+	});
+	
+	window.addEventListener('keyup', function(e) {
+		var k = e.keyCode;
+		
+		var index = keycodeValues.indexOf(k);
+		if (index > -1) {
+			e.preventDefault();
+			
+			keysdown[keyNames[index]] = false;
+		}
 	});
 }
 
