@@ -2,21 +2,28 @@ extends ./temps/base
 block body
 	div#menu
 		a(href='/login') Log In
-	form(name='signupForm', class='login')
-		label(for='username') Username:
-		input(type='text', name='username')
-		div(class='clear')
+	
+	h1 Pointy-Eared Adventure-Seekers
+	p.subtitle A game about adventurers with pointy ears.
+	
+	div.box
+		form(name='signupForm', class='login')
+			label(for='username') Username:
+			input(type='text', name='username')
+			div(class='clear')
+			
+			label(for='pass1') Password:
+			input(type='password', name='pass1')
+			div(class='clear')
+			
+			label(for='pass2') Confirm Password:
+			input(type='password', name='pass2')
+			div(class='clear')
+			
+			input(type='hidden', name='csrfToken', value='#{csrfToken}')
+			button#signupButton(class='submit', href='#') Sign Up
 		
-		label(for='pass1') Password:
-		input(type='password', name='pass1')
-		div(class='clear')
+		p#error
 		
-		label(for='pass2') Confirm Password:
-		input(type='password', name='pass2')
-		div(class='clear')
-		
-		input(type='hidden', name='csrfToken', value='#{csrfToken}')
-		button#signupButton(class='submit', href='#') Sign Up
-	p#error
 block scripts
 	script(src='/assets/accounts.js')

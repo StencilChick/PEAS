@@ -6,22 +6,23 @@ block body
 		a(href='/main') Game
 		
 	canvas#view(width='640', height='480')
-	form.login(name='tileForm')
-		label(for='x') X:
-		input(type='number', name='x', value=0)
-		div.clear
-		
-		label(for='y') Y:
-		input(type='number', name='y', value=0)
-		div.clear
-		
-		label(for='collider') Collider:
-		input(type='checkbox', name='collider')
-		div.clear
-	div(style='width:640px;margin:0 auto')
-		button#outputMap(style='float:right') Output Map
-		div.clear
 	
+	div.box
+		form.login(name='tileForm')
+			label(for='x') X:
+			input(type='number', name='x', value=0)
+			div.clear
+			
+			label(for='y') Y:
+			input(type='number', name='y', value=0)
+			div.clear
+			
+			label(for='collider') Collider:
+			input(type='checkbox', name='collider')
+			div.clear
+			
+			button#outputMap Output Map
+			
 	p#output(style='width:50%;margin:0 auto')
 block scripts
 	script(src='/assets/mapMaker.js')

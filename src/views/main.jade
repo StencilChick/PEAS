@@ -5,7 +5,10 @@ block body
 		
 	canvas#game(width='640', height='480')
 	
-	p.info You = Blue, Other Players = Green
+	div.box
+		p You are the character in blue.  Other players are represented by characters in green.
+		br
+		p Use the arrow keys or WASD to move
 block scripts
 	script(src='/socket.io/socket.io.js')
 	script(src='/assets/game.js')

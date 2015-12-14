@@ -86,10 +86,11 @@ var setupCanvas = function() {
 var updateCanvas = function() {
 	if (map && tileset.complete && characterSprite.complete) {
 		// update all the things
-		if (!(keysdown.left || keysdown.right || keysdown.up || keysdown.down)) {
+		if (!(keysdown.left || keysdown.right || keysdown.up || keysdown.down ||
+				keysdown.a || keysdown.d || keysdown.w || keysdown.s)) {
 			player.walking = false;
 		} else {
-			if (keysdown.left) {
+			if (keysdown.left || keysdown.a) {
 				player.x -= 3 / 30;
 				if (isColliding()) player.x += 3 / 30;
 				player.direction = direction.left;
@@ -97,7 +98,7 @@ var updateCanvas = function() {
 				if (!player.walking) player.animFrame = 1;
 				player.walking = true;
 			} 
-			if (keysdown.right) {
+			if (keysdown.right || keysdown.d) {
 				player.x += 3 / 30;
 				if (isColliding()) player.x -= 3 / 30;
 				player.direction = direction.right;
@@ -105,7 +106,7 @@ var updateCanvas = function() {
 				if (!player.walking) player.animFrame = 1;
 				player.walking = true;
 			}
-			if (keysdown.up) {
+			if (keysdown.up || keysdown.w) {
 				player.y -= 3 / 30;
 				if (isColliding()) player.y += 3 / 30;
 				player.direction = direction.up;
@@ -113,7 +114,7 @@ var updateCanvas = function() {
 				if (!player.walking) player.animFrame = 1;
 				player.walking = true;
 			}
-			if (keysdown.down) {
+			if (keysdown.down || keysdown.s) {
 				player.y += 3 / 30;
 				if (isColliding()) player.y -= 3 / 30;
 				player.direction = direction.down;

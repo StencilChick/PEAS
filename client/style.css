@@ -1,25 +1,83 @@
+@font-face {
+	font-family:'Algerian';
+	src:url('fonts/alger.ttf');
+}
+
 body {
-	/*background:#6A9944;*/
-	/*background:#303035;*/
+	background:#664b45;
+	
+	margin-top:0;
+	margin-bottom:0;
 }
 
 h1 {
-	color:#FFF849;
+	color:#ebd744;
+	text-align:center;
+	font-family:'Algerian';
+}
+
+h2 {
+	margin-top:0;
+	
+	color:#ebd744;
+	text-align:center;
+}
+
+p.subtitle {
+	margin-top:0;
+	
+	color:#ebd744;
+	text-align:center;
+	font-style:italic;
+}
+
+a:link, a:visited {
+	color:#ebd744;
+	text-decoration:none;
+	font-weight:bold;
+}
+a:hover, a:active {
+	text-decoration:underline;
 }
 
 canvas {
 	display:block;
-	margin:0 auto;
+	margin:2em auto 0;
 	
 	background-color:black;
+	
+	border:3px solid #b3a750;
 }
 
 .clear { clear: both; }
 
+div.box {
+	width:512px;
+	margin:3em auto;
+	padding:0.5em;
+	
+	border:double 5px #b3a750;
+	
+	background:#8c8a66;
+}
+div.box p {
+	margin:0;
+}
+
+#menu {
+	padding:0 3em 0.25em;
+
+	background:#8c8a66;
+	color:#ebd744;
+
+	border-bottom-left-radius:5em;
+	border-bottom-right-radius:5em;
+}
 #menu a {
-	color:black;
+	color:#ebd744;
 	text-decoration:none;
 	font-size:16pt;
+	font-weight:bold;
 }
 #menu a:hover {
 	text-decoration:underline;
@@ -30,6 +88,8 @@ canvas {
 }
 
 p#error {
+	margin:0;
+
 	color:red;
 	text-align:center;
 }
@@ -49,5 +109,34 @@ form.login {
 	width:356px;
 	margin:0 auto;
 }
-form.login label { float: left; }
-form.login input[type='text'], form.login input[type='password'], form.login inpu[type='checkbox'] { float: right; }
+form.login label { 
+	float: left;
+	margin-bottom:0.25em;
+	
+	color:#ebd744;
+	font-weight:bold;
+}
+form.login input[type='text'], 
+form.login input[type='password'], 
+form.login input[type='checkbox'] ,
+form.login input[type='number']
+{ 
+	float: right;
+	
+	background:#83c9bb;
+	
+	border:1px solid #b3a750;
+}
+form.login button {
+	width:100%;
+	
+	background:#83c9bb;
+	color:#ebd744;
+	font-weight:bold;
+	font-size:12pt;
+	
+	border:5px double #b3a750;
+}
+form.login button:active {
+	background:#6ca3a6;
+}
