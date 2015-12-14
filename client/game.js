@@ -45,6 +45,12 @@ var setupSocket = function() {
 	
 	socket.on('map', function(data) {
 		map = data;
+		console.log(players);
+	});
+	
+	socket.on('updatePos', function(data) {
+		player.x = data.x;
+		player.y = data.y;
 	});
 	
 	socket.on('join', function(data) {
@@ -112,6 +118,8 @@ var updateCanvas = function() {
 				if (!player.walking) player.animFrame = 1;
 				player.walking = true;
 			}
+			
+			transport();
 		}
 		
 		if (player.walking) {
@@ -163,6 +171,21 @@ var updateCanvas = function() {
 	
 	// update
 	setTimeout(updateCanvas, 1000/30);
+}
+
+var transport = function() {
+	if (player.x > 20) {
+		if (map.right) {
+			socket.emit('transport', {direction: 'right', map: map.right});
+			players = {};
+		}
+	} else if (player.x < 0) {
+		if (map.left) {
+			socket.emit('transport', {direction: 'left', map: map.left});
+			players = {};
+			console.log(players);
+		}
+	}
 }
 
 var sortCharacters = function() {

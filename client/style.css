@@ -1,5 +1,10 @@
 body {
+	/*background:#6A9944;*/
+	/*background:#303035;*/
+}
 
+h1 {
+	color:#FFF849;
 }
 
 canvas {
@@ -29,9 +34,20 @@ p#error {
 	text-align:center;
 }
 
+p.info {
+	width:480px;
+	margin:2em auto;
+	padding:1em;
+	
+	background:#898796;
+	color:#eee;
+	
+	text-align:center;
+}
+
 form.login {
 	width:356px;
 	margin:0 auto;
 }
 form.login label { float: left; }
-form.login input[type='text'], form.login input[type='password'] { float: right; }
+form.login input[type='text'], form.login input[type='password'], form.login inpu[type='checkbox'] { float: right; }

@@ -30,8 +30,7 @@ var setupInput = function() {
 		var x = Math.floor((e.pageX - canvasRect.left) / 32);
 		var y = Math.floor((e.pageY - canvasRect.top) / 32);
 		
-		console.log(x + ', ' + y);
-		map.tiles[y][x] = {x: form['x'].value, y: form['y'].value};
+		map.tiles[y][x] = {x: form['x'].value, y: form['y'].value, collider: form['collider'].checked};
 	});
 	
 	// buttons
@@ -50,6 +49,11 @@ var updateCanvas = function() {
 			if (map.tiles[y][x] != undefined) {
 				var tile = map.tiles[y][x];
 				context.drawImage(tileset, tile.x*32, tile.y*32, 32, 32, x*32, y*32, 32, 32);
+				
+				if (tile.collider) {
+					context.fillStyle = 'rgba(255, 0, 0, 0.5)';
+					context.fillRect(x*32, y*32, 32, 32);
+				}
 			}
 		}
 	}
