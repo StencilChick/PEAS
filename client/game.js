@@ -38,14 +38,13 @@ var setupSocket = function() {
 	players = {};
 	
 	socket.on('connect', function() {
-		player.x = Math.floor(Math.random() * 5);
-		player.y = Math.floor(Math.random() * 5);
+		player.x = Math.floor(Math.random() * 5)+4;
+		player.y = Math.floor(Math.random() * 5)+7;
 		socket.emit('join', player);
 	});
 	
 	socket.on('map', function(data) {
 		map = data;
-		console.log(players);
 	});
 	
 	socket.on('updatePos', function(data) {
@@ -92,6 +91,7 @@ var updateCanvas = function() {
 		} else {
 			if (keysdown.left) {
 				player.x -= 3 / 30;
+				if (isColliding()) player.x += 3 / 30;
 				player.direction = direction.left;
 				
 				if (!player.walking) player.animFrame = 1;
@@ -99,6 +99,7 @@ var updateCanvas = function() {
 			} 
 			if (keysdown.right) {
 				player.x += 3 / 30;
+				if (isColliding()) player.x -= 3 / 30;
 				player.direction = direction.right;
 				
 				if (!player.walking) player.animFrame = 1;
@@ -106,6 +107,7 @@ var updateCanvas = function() {
 			}
 			if (keysdown.up) {
 				player.y -= 3 / 30;
+				if (isColliding()) player.y += 3 / 30;
 				player.direction = direction.up;
 				
 				if (!player.walking) player.animFrame = 1;
@@ -113,6 +115,7 @@ var updateCanvas = function() {
 			}
 			if (keysdown.down) {
 				player.y += 3 / 30;
+				if (isColliding()) player.y -= 3 / 30;
 				player.direction = direction.down;
 				
 				if (!player.walking) player.animFrame = 1;
@@ -185,6 +188,17 @@ var transport = function() {
 			players = {};
 			console.log(players);
 		}
+	}
+}
+
+var isColliding = function() {
+	var x = Math.round(player.x);
+	var y = Math.round(player.y);
+	
+	if (x >= 0 && x < 20 && y >= 0 && y < 15) {
+		return map.tiles[y][x].collider;
+	} else {
+		return false;
 	}
 }
 
